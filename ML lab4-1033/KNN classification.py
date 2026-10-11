@@ -1,0 +1,56 @@
+#hafsa-1033
+
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_wine
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+# Load dataset
+wine = load_wine()
+X = wine.data
+y = wine.target
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+# Try different k values
+k_values = [1, 3, 5, 7, 9]
+
+accuracy_scores = []
+
+for k in k_values:
+
+    knn = KNeighborsClassifier(n_neighbors=k)
+
+    knn.fit(X_train, y_train)
+
+    accuracy = knn.score(X_test, y_test)
+
+    accuracy_scores.append(accuracy)
+
+# Plot
+plt.scatter(k_values, accuracy_scores)
+
+plt.xlabel("k")
+plt.ylabel("Accuracy")
+plt.title("Accuracy vs k values")
+
+plt.show()
+# Try k from 1 to 29
+k_values = range(1, 30)
+accuracy_scores = []
+for k in k_values:
+
+    knn = KNeighborsClassifier(n_neighbors=k)
+
+    knn.fit(X_train, y_train)
+
+    y_pred = knn.predict(X_test)
+
+    accuracy = accuracy_score(y_test, y_pred)
+
+    accuracy_scores.append(accuracy)
+# Find best k
+best_k = k_values[accuracy_scores.index(max(accuracy_scores))]
+print("Best value of k:", best_k)
